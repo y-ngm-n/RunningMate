@@ -5,9 +5,8 @@ const authRouter = require("./routes/auth");
 
 const app = express();
 
-app.get("/", (req, res) => {
-    res.send("ang");
-});
+app.use("/", pageRouter);
+app.use("/auth", authRouter);
 
 app.listen(3000, (req, res) => {
     console.log("3000번 포트에서 서버가동");
