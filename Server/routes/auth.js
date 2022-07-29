@@ -5,15 +5,15 @@ const UserStorage = require("../models/UserStorage");
 const router = express.Router();
 
 
-router.post("/login", (req, res) => {
+router.post("/login", async (req, res) => {
     console.log(req.body);
-    const user = UserStorage.findUser(req.body);
+    const user = await UserStorage.findUser(req.body);
     console.log(user);
 });
 
-router.post("/register", (req, res) => {
+router.post("/register", async (req, res) => {
     console.log(req.body);
-    const user = UserStorage.findUser(req.body);
+    const user = await UserStorage.findUser(req.body);
     console.log(user);
 })
 

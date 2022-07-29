@@ -4,7 +4,9 @@ module.exports = {
     findUser(data) {
         return fs.readFile("./databases/user.json")
         .then((data) => {
+            
             const { ids, pws } = JSON.parse(data);
+            console.log(ids,pws);
             if (ids.includes(data.email)) {
                 const idx = ids.indexOf(data.email);
                 return { email: data.email, pw: pws[idx] };
