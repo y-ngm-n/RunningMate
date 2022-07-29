@@ -2,7 +2,6 @@ const fs = require("fs").promises;
 
 module.exports = {
     findUser(data) {
-        console.log("123");
         return fs.readFile("./databases/user.json")
         .then((data) => {
             const { ids, pws } = JSON.parse(data);
