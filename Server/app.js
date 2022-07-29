@@ -1,5 +1,7 @@
 const express = require("express");
 
+const UserStorage = require("./models/UserStorage");
+
 const pageRouter = require("./routes/page");
 const authRouter = require("./routes/auth");
 
@@ -7,6 +9,11 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use("/", (req, res, nxt) => {
+    UserStorage.findUser();
+    nxt();
+})
 
 app.use("/", pageRouter);
 app.use("/auth", authRouter);
