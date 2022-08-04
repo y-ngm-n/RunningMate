@@ -1,14 +1,38 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, TabActions } from "@react-navigation/native";
 import { SafeAreaProvider} from "react-native-safe-area-context";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
-//screens
+//Initial screens
+
 import SignupScreen from "./screens/InitialScreen/SignupScreen";
 import LoginScreen from "./screens/InitialScreen/LoginScreen";
 
+//Auth screens
+
+import HomeScreen from "./screens/AuthScreen/HomeScreen";
+import MypageScreen from "./screens/AuthScreen/MypageScreen";
+
+
 const InitialStack = createNativeStackNavigator();
+const AuthStackTab = createBottomTabNavigator();
+
+function AuthScreen(){
+  return(
+    <NavigationContainer>
+      <AuthStackTab.Navigator screenOptions={
+        {
+          headerShown:false,
+        }
+      }>
+        <AuthStackTab.Screen name="Home" component={HomeScreen} />
+        <AuthStackTab.Screen name="Mypage" component={MypageScreen} />
+      </AuthStackTab.Navigator>
+    </NavigationContainer>
+  )
+};
 
 function InitialScreen() {
   return (
@@ -24,7 +48,7 @@ function InitialScreen() {
 export default function App() {
   return (
     <SafeAreaProvider>
-      <InitialScreen />
+      <AuthScreen />
     </SafeAreaProvider>
   );
 }
