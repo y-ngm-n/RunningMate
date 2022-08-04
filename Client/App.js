@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer, TabActions } from "@react-navigation/native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { useContext } from "react";
 
 //screens
 
@@ -14,7 +15,8 @@ import MypageScreen from "./screens/AuthScreen/MypageScreen";
 import CommunityScreen from "./screens/AuthScreen/CommunityScreen";
 
 //contextAPI
-import AuthContextProvider from "./store/auth-context";
+import AuthContextProvider, { AuthContext } from "./store/auth-context";
+
 
 
 //components
@@ -30,6 +32,7 @@ function AuthScreen() {
           headerShown: false,
         }}
       >
+
         <AuthStackTab.Screen name="Home" component={HomeScreen} />
         <AuthStackTab.Screen name="Mypage" component={MypageScreen} />
         <AuthStackTab.Screen name="Community" component={CommunityScreen} />
@@ -49,10 +52,12 @@ function InitialScreen() {
   );
 }
 export default function App() {
+  const authCtx = useContext(AuthContext);
   return (
     <SafeAreaProvider>
       <AuthContextProvider>
-        <AuthScreen />
+        {!authCtx.isAuthenticated&&<InitialScreen />}
+        {authCtx.isAuthenticated&&<AuthScreen />}
       </AuthContextProvider>
     </SafeAreaProvider>
   );
