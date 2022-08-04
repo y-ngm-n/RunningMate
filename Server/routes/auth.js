@@ -43,10 +43,39 @@ router.post("/login", async (req, res) => {
     }
 });
 
+// 이메일 중복체크
+router.post("/register/overlap", async (req, res) => {
+    try {
+        const result = await UserStorage.isOverlapped(req.body);
+        if (!result) { res.json({ success: true }); }
+        else {
+            res.json({
+                success: false,
+                message: "이미 존재하는 이메일입니다.",
+            });
+        }
+    } catch (err) {
+        console.error(err);
+        return res.json({
+            success: false,
+            message: "서버 에러",
+        });
+    }
+    
+});
+
 // 회원가입
 router.post("/register", async (req, res) => {
-    const user = await UserStorage.findUser(data);
-    console.log(user);
+    try {
+        await UserStorage.createUser(req.body);
+        res.json({ success: true });
+    } catch (err) {
+        console.error(err);
+        return res.json({
+            success: false,
+            message: "서버 에러",
+        });
+    }
 });
 
 // 토큰 테스트

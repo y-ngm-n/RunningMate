@@ -2,17 +2,42 @@ const fs = require("fs").promises;
 
 class UserStorage {
 
-    static findUser(user) {
+    // overlap check
+    static isOverlapped(req) {
+        return fs.readFile("./databases/user.json")
+        .then((data) => {
+            const { emails } = JSON.parse(data);
+            if (emails.includes(req.email)) { return true; }
+            else { return false; }
+        })
+        .catch((err) => console.error(err));
+    }
+
+    // login
+    static findUser(req) {
         return fs.readFile("./databases/user.json")
         .then((data) => {
             const { emails, pws } = JSON.parse(data);
-            if (emails.includes(user.email)) {
-                const idx = emails.indexOf(user.email);
-                return { email: user.email, pw: pws[idx] };
+            if (emails.includes(req.email)) {
+                const idx = emails.indexOf(req.email);
+                return { email: req.email, pw: pws[idx] };
             }
         })
         .catch((err) => console.error(err));
     }
+
+    // register
+    static createUser(req) {
+        fs.readFile("./databases/user.json")
+        .then((data) => {
+            const { emails, pws } = JSON.parse(data);
+            emails.push(req.email);
+            pws.push(req.pw);
+            fs.writeFile("./databases/user.json", JSON.stringify({ emails, pws }));
+        })
+        .catch(console.error);
+    }
+
 }
 
 module.exports = UserStorage;
