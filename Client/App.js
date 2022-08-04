@@ -11,9 +11,11 @@ import SignupScreen from "./screens/InitialScreen/SignupScreen";
 import LoginScreen from "./screens/InitialScreen/LoginScreen";
 import HomeScreen from "./screens/AuthScreen/HomeScreen";
 import MypageScreen from "./screens/AuthScreen/MypageScreen";
+import CommunityScreen from "./screens/AuthScreen/CommunityScreen";
 
 //contextAPI
 import AuthContextProvider from "./store/auth-context";
+
 
 //components
 
@@ -30,6 +32,7 @@ function AuthScreen() {
       >
         <AuthStackTab.Screen name="Home" component={HomeScreen} />
         <AuthStackTab.Screen name="Mypage" component={MypageScreen} />
+        <AuthStackTab.Screen name="Community" component={CommunityScreen} />
       </AuthStackTab.Navigator>
     </NavigationContainer>
   );
