@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Alert } from "react-native";
 import { SafeAreaView, withSafeAreaInsets } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
 
@@ -10,8 +10,8 @@ import FlatButton from "../../components/Button/FlatButton";
 import Header from "../../components/ui/Header";
 import PrimaryButton from "../../components/Button/PrimaryButton";
 import Input from "../../components/ui/Input";
-
 import { deviceHeight, deviceWidth } from "../../util/device-information";
+import { login } from "../../util/auth";
 
 function LoginScreen() {
   const [email, setEmail] = useState();
@@ -19,6 +19,30 @@ function LoginScreen() {
     const navigation=useNavigation();
   function signUp(){
     navigation.navigate('SignUp');
+  }
+  async function loginButtonHandler(){
+    if (email && email.includes('@')){
+      if (password){
+        //check email and password with server
+        try{
+          const token = await login(email,password);
+          console.log(token.data);
+        }
+        catch (e){
+          console.log('로그인에러!!',e);
+          Alert.alert('로그인 실패','서버 오류');
+        }
+        
+      }
+      else{
+        Alert.alert('로그인 실패','패스워드를 입력하세요!');
+        return;
+      }
+    }
+    else{
+        Alert.alert('로그인 실패','이메일을 입력하지 않았거나 잘못된 이메일 형식입니다!');
+        return;
+    }
   }
   return (
     <SafeAreaView style={styles.rootContainer}>
@@ -48,7 +72,7 @@ function LoginScreen() {
         </View>
       </View>
       <View style={styles.buttonContainer}>
-        <PrimaryButton>로그인</PrimaryButton>
+        <PrimaryButton onPress={loginButtonHandler}>로그인</PrimaryButton>
       </View>
     </SafeAreaView>
   );
