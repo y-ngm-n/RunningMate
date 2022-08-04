@@ -1,15 +1,18 @@
 const fs = require("fs").promises;
 
-module.exports = {
-    findUser(data) {
+class UserStorage {
+
+    static findUser(user) {
         return fs.readFile("./databases/user.json")
         .then((data) => {
-            const { ids, pws } = JSON.parse(data);
-            if (ids.includes(data.email)) {
-                const idx = ids.indexOf(data.email);
-                return { email: data.email, pw: pws[idx] };
+            const { emails, pws } = JSON.parse(data);
+            if (emails.includes(user.email)) {
+                const idx = emails.indexOf(user.email);
+                return { email: user.email, pw: pws[idx] };
             }
         })
         .catch((err) => console.error(err));
-    },
+    }
 }
+
+module.exports = UserStorage;
