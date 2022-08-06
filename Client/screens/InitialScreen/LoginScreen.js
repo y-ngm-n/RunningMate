@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { View, Text, StyleSheet, Alert } from "react-native";
 import { SafeAreaView, withSafeAreaInsets } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
@@ -12,10 +12,12 @@ import PrimaryButton from "../../components/Button/PrimaryButton";
 import Input from "../../components/ui/Input";
 import { deviceHeight, deviceWidth } from "../../util/device-information";
 import { login } from "../../util/auth";
+import { AuthContext } from "../../store/auth-context";
 
 function LoginScreen() {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
+  const authCtx = useContext(AuthContext);
     const navigation=useNavigation();
   function signUp(){
     navigation.navigate('SignUp');
@@ -26,7 +28,9 @@ function LoginScreen() {
         //check email and password with server
         try{
           const token = await login(email,password);
-          console.log(token.data);
+          authCtx.saveAuthenticate(token);
+          authCtx.isAuthenticated=true;
+          console.log(token);
         }
         catch (e){
           console.log('로그인에러!!',e);
