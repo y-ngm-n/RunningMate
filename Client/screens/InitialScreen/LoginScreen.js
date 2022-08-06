@@ -13,6 +13,7 @@ import Input from "../../components/ui/Input";
 import { deviceHeight, deviceWidth } from "../../util/device-information";
 import { login } from "../../util/auth";
 import { AuthContext } from "../../store/auth-context";
+import axios from "axios";
 
 function LoginScreen() {
   const [email, setEmail] = useState();
@@ -21,6 +22,10 @@ function LoginScreen() {
     const navigation=useNavigation();
   function signUp(){
     navigation.navigate('SignUp');
+  }
+  async function testF(token){
+    const response = await axios.get('http://localhose:3000/auth/test');
+    console.log(response);
   }
   async function loginButtonHandler(){
     if (email && email.includes('@')){
@@ -31,6 +36,7 @@ function LoginScreen() {
           authCtx.saveAuthenticate(token);
           authCtx.isAuthenticated=true;
           console.log(token);
+        
         }
         catch (e){
           console.log('로그인에러!!',e);
