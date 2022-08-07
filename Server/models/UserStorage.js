@@ -20,7 +20,7 @@ class UserStorage {
             const { emails, pws } = JSON.parse(data);
             if (emails.includes(req.email)) {
                 const idx = emails.indexOf(req.email);
-                return { email: req.email, pw: pws[idx] };
+                return { email: req.email, password: pws[idx] };
             }
         })
         .catch((err) => console.error(err));
@@ -32,7 +32,7 @@ class UserStorage {
         .then((data) => {
             const { emails, pws } = JSON.parse(data);
             emails.push(req.email);
-            pws.push(req.pw);
+            pws.push(req.password);
             fs.writeFile("./databases/user.json", JSON.stringify({ emails, pws }));
         })
         .catch(console.error);

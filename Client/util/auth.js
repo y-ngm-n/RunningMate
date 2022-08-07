@@ -7,6 +7,5 @@ export async function login(email, password) {
     email: email,
     password: password,
   });
-  const token = response.data.token;
-  return token;
+  return response.data;
 }

@@ -32,10 +32,18 @@ function LoginScreen() {
       if (password){
         //check email and password with server
         try{
-          const token = await login(email,password);
-          authCtx.saveAuthenticate(token);
-          authCtx.isAuthenticated=true;
-          console.log(token);
+          const result = await login(email,password);
+          if (result.success) {
+            const token = result.token;
+            authCtx.saveAuthenticate(token);
+            authCtx.isAuthenticated=true;
+            console.log(token);
+          } else {
+            const msg = result.message;
+            console.log(msg);
+            Alert.alert(msg);
+          }
+          
         
         }
         catch (e){
