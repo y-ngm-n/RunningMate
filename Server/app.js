@@ -8,6 +8,7 @@ const path = require("path");
 const app = express();
 const pageRouter = require("./routes/page");
 const authRouter = require("./routes/auth");
+const gymRouter = require("./routes/gym");
 
 dotenv.config();
 app.set("port", 3000);
@@ -25,6 +26,7 @@ app.use(morgan("dev"));
 // router
 app.use("/", pageRouter);
 app.use("/auth", authRouter);
+app.use("/gym", gymRouter);
 
 
 // operate server
