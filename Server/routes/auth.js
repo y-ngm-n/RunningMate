@@ -17,7 +17,7 @@ router.post("/login", async (req, res) => {
                 message: "사용자 정보를 찾을 수 없습니다.",
             })
         }
-        if (user.password !== req.body.password) {
+        if (user.pw !== req.body.password) {
             return res.json({
                 success: false,
                 message: "비밀번호가 다릅니다.",

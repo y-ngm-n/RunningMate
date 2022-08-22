@@ -28,8 +28,8 @@ class UserStorage {
             const query = "INSERT INTO users(email, password) VALUES(?, ?);"
             db.query(query, [req.email, req.password], (err, data) => {
                 resolve({ success: true });
-            })
-        })
+            });
+        });
     }
 
     static entryGym(email, gymId) {

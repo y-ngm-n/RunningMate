@@ -1,9 +1,10 @@
 import { useContext, useState } from "react";
 import { View, Text, StyleSheet, Alert } from "react-native";
-import { SafeAreaView, withSafeAreaInsets } from "react-native-safe-area-context";
+import {
+  SafeAreaView,
+  withSafeAreaInsets,
+} from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
-
-
 
 //components
 import FlatButton from "../../components/Button/FlatButton";
@@ -19,47 +20,46 @@ function LoginScreen() {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const authCtx = useContext(AuthContext);
-    const navigation=useNavigation();
-  function signUp(){
-    navigation.navigate('SignUp');
+  const navigation = useNavigation();
+  function signUp() {
+    navigation.navigate("SignUp");
   }
-  async function testF(token){
-    const response = await axios.get('http://localhose:3000/auth/test');
+  async function testF(token) {
+    const response = await axios.post("http://localhose:3000/auth/test", {
+      headers: {authorization:token},
+    });
     console.log(response);
   }
-  async function loginButtonHandler(){
-    if (email && email.includes('@')){
-      if (password){
+  async function loginButtonHandler() {
+    if (email && email.includes("@")) {
+      if (password) {
         //check email and password with server
-        try{
-          const result = await login(email,password);
-          if (result.success) {
-            const token = result.token;
-            authCtx.saveAuthenticate(token);
-            authCtx.isAuthenticated=true;
-            console.log(token);
-          } else {
-            const msg = result.message;
-            console.log(msg);
-            Alert.alert(msg);
+        try {
+          const response = await login(email, password);
+          const success = response.success;
+          if (!success) {
+            const message=response.message;
+            Alert.alert("로그인 실패", `${message}`);
+            return;
           }
-          
-        
+          const token = response.token;
+          authCtx.saveAuthenticate(token);
+          authCtx.isAuthenticated = true;
+          await testF(token);
+        } catch (e) {
+          console.log("로그인 에러", e);
+          Alert.alert("로그인 실패", "서버 오류");
         }
-        catch (e){
-          console.log('로그인에러!!',e);
-          Alert.alert('로그인 실패','서버 오류');
-        }
-        
-      }
-      else{
-        Alert.alert('로그인 실패','패스워드를 입력하세요!');
+      } else {
+        Alert.alert("로그인 실패", "패스워드를 입력하세요!");
         return;
       }
-    }
-    else{
-        Alert.alert('로그인 실패','이메일을 입력하지 않았거나 잘못된 이메일 형식입니다!');
-        return;
+    } else {
+      Alert.alert(
+        "로그인 실패",
+        "이메일을 입력하지 않았거나 잘못된 이메일 형식입니다!"
+      );
+      return;
     }
   }
   return (
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor:'white',
+    backgroundColor: "white",
   },
   form: {
     flex: 1,

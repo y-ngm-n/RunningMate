@@ -71,6 +71,7 @@ function SignupScreen() {
           email: email,
           password: password,
         });
+
         if (response.data.success){
           Alert.alert('회원가입 완료','환영합니다!');
           navigation.replace('Login');
