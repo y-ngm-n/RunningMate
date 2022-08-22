@@ -1,41 +1,45 @@
-const fs = require("fs").promises;
+const db = require("./index");
 
 class UserStorage {
 
     // overlap check
     static isOverlapped(req) {
-        return fs.readFile("./databases/user.json")
-        .then((data) => {
-            const { emails } = JSON.parse(data);
-            if (emails.includes(req.email)) { return true; }
-            else { return false; }
-        })
-        .catch((err) => console.error(err));
+        return new Promise((resolve, reject) => {
+            const query = "SELECT email FROM users WHERE email = ?;";
+            db.query(query, [req.email], (err, data) => {
+                resolve(data[0]);
+            });
+        });
     }
 
     // login
     static findUser(req) {
-        return fs.readFile("./databases/user.json")
-        .then((data) => {
-            const { emails, pws } = JSON.parse(data);
-            if (emails.includes(req.email)) {
-                const idx = emails.indexOf(req.email);
-                return { email: req.email, password: pws[idx] };
-            }
-        })
-        .catch((err) => console.error(err));
+        return new Promise((resolve, reject) => {
+            const query = "SELECT email, password FROM users WHERE email = ?;";
+            db.query(query, [req.email], (err, data) => {
+                resolve(data[0]);
+            });
+        });
     }
 
     // register
     static createUser(req) {
-        fs.readFile("./databases/user.json")
-        .then((data) => {
-            const { emails, pws } = JSON.parse(data);
-            emails.push(req.email);
-            pws.push(req.password);
-            fs.writeFile("./databases/user.json", JSON.stringify({ emails, pws }));
+        return new Promise((resolve, reject) => {
+            const query = "INSERT INTO users(email, password) VALUES(?, ?);"
+            db.query(query, [req.email, req.password], (err, data) => {
+                resolve({ success: true });
+            })
         })
-        .catch(console.error);
+    }
+
+    static entryGym(email, gymId) {
+        return new Promise((resolve, reject) => {
+            const query = "UPDATE users SET gym_id = ? WHERE email = ?;";
+            db.query(query, [gymId, email], (err, data) => {
+                if (err) { reject({ success: false, msg: "헬스장 등록 실패" }); }
+                resolve({ success: true });
+            });
+        });
     }
 
 }
